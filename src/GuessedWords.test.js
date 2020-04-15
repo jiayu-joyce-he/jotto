@@ -10,9 +10,9 @@ const defaultProps = {
     guessedWords: [
         {
             guessedWord: 'train',
-            letterMatchCount: 3
-        }
-    ]
+            letterMatchCount: 3,
+        },
+    ],
 }
 
 /**
@@ -23,6 +23,7 @@ const defaultProps = {
  */
 const setup = (props = {}) => {
     const setupProps = { ...defaultProps, ...props }
+    // the reason to include defaultProps is to ensure we have all required props
     return shallow(<GuessedWords {...setupProps} />)
 }
 
@@ -30,14 +31,16 @@ test('does not throw warning with default props', () => {
     checkProps(GuessedWords, defaultProps)
 })
 
-// describe that we are in the no words context
+// describe is a way to group tests; describe that we are in the no words context;
+// This helps document tests and for people to look at failures
 describe('if there are no words guessed', () => {
     let wrapper
     beforeEach(() => {
+        // here we overwrite the guessedwords to test
         wrapper = setup({ guessedWords: [] })
     })
     test('renders without error', () => {
-        const component = findByTestAttr(wrapper, 'componenet-guessed-words')
+        const component = findByTestAttr(wrapper, 'component-guessed-words')
         expect(component.length).toBe(1)
     })
     test('renders instructions to guess a word', () => {
@@ -46,4 +49,29 @@ describe('if there are no words guessed', () => {
     })
 })
 
-describe('if there are words guessed', () => {})
+describe('if there are words guessed', () => {
+    let wrapper
+    let guessedWords = [
+        { guessedWord: 'train', letterMatchCount: 3 },
+        { guessedWord: 'agile', letterMatchCount: 1 },
+        { guessedWord: 'party', letterMatchCount: 5 },
+    ]
+    beforeEach(() => {
+        wrapper = setup({ guessedWords })
+    })
+
+    test('renders without error', () => {
+        const component = findByTestAttr(wrapper, 'component-guessed-words')
+        expect(component.length).toBe(1)
+    })
+
+    test('renders "guessed words" section', () => {
+        const guessedWordsNode = findByTestAttr(wrapper, 'guessed-words')
+        expect(guessedWordsNode.length).toBe(1)
+    })
+
+    test('correct number of guessed words', () => {
+        const guessedWordsNodes = findByTestAttr(wrapper, 'guessed-word')
+        expect(guessedWordsNodes.length).toBe(guessedWords.length)
+    })
+})
