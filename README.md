@@ -1,3 +1,5 @@
+<!-- @format -->
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -66,3 +68,26 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `yarn build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+## Study Notes
+
+### Simple Redux Summary
+
+Set up Action Creator and reducer
+Set up connected component with stores
+use Enzyme .dive()
+to access child component from higher order component
+storeFactory
+to create a store for each test with app settings
+
+### Redux Thunk
+
+It's a middleware for redux and provides additional functionality. It's a way for us to have more flexibility in our action creators. Intead of creating an action object, the action creator will return a function.
+
+Thunk -> a function that returns a function
+
+Because we're returning a function intead of an action object, we have the ability now to dispatch multiple actions within that function.
+
+It also allows us to access the current state
+
+For example, in this project, thunk can help us always dispatch GUESS*WORD, and conditionally dispatch CORRECT_GUESS. It also allows us to access \_success* picece of state, so we can determine whether or not to dispatch CORRECT_GUESS.
