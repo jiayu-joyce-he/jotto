@@ -91,3 +91,51 @@ Because we're returning a function intead of an action object, we have the abili
 It also allows us to access the current state
 
 For example, in this project, thunk can help us always dispatch GUESS*WORD, and conditionally dispatch CORRECT_GUESS. It also allows us to access \_success* picece of state, so we can determine whether or not to dispatch CORRECT_GUESS.
+
+#### Thunk Testing Summary
+
+-   create a store with initial state
+-   dispatch action creator
+-   check to see if state has been updated
+-
+
+### Moxios (mock requests)
+
+Using moxios lets us test app:
+
+1. without testing server and 2) without even running server
+
+#### How moxios work
+
+axios will now send request to moxios instead of http. The test then specifies what moxios response. The test then calls action creator. When action creator calls axios, it uses moxios instead of http for request. The action creator receives moxios resposne from axios, and use that when it runs the rest of the action creators.
+
+Tests calls moxios.install(). It sets moxios as the axios adapter. Routes axios calls to moxios intead of http.
+
+During the test, you'll call moxios.wait(). It watches for axios calls and it sends a response using the callback passed to .wait().
+
+To get the most recent request, use for example, const request = moxios.requests.mostRecent()
+
+Send response using the callbackpassed to .wait(), such as:
+request.respondWith({
+status: 200,
+response: secretWord
+})
+
+#### Testing Aysnc Action Creators
+
+-   create store using storeFactory() with initial state
+-   Async actions: store.dispatch() returns promise
+-   Put tests in .then() callback, and the tests will run after dispatch completes
+-   be careful to see tests fail
+-   if they don't see the tests fail, it's likely that you didn't return store.dispatch() promise
+
+Note that moxios.wait() is also asynchronous. It's more important than ever to see tests fail. It's very easy for tests to complete before async. Because tests can pass even though assertion fails. If you're not careful, the test can exit before promis resolves.
+
+### Test Redux Components
+
+Test Component Redux Props
+
+-   do components have access to the state they need? the action creators they need?
+    Test Action Creator Triggers
+-   use mocks to 'spy' on action creators
+-   are they called when expected?

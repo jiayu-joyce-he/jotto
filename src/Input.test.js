@@ -70,3 +70,21 @@ describe('render', () => {
 })
 
 describe('update state', () => {})
+
+describe('redux props', () => {
+    test('has success piece of state as prop', () => {
+        const success = true
+        const wrapper = setup({ success })
+        // wrapper.instance() is the react component of the wrapper
+        // wrapper.instance().props return props as an object
+        const successProp = wrapper.instance().props.success
+        expect(successProp).toBe(success)
+    })
+
+    test('`guessWord` action creator is a function prop', () => {
+        const wrapper = setup()
+        const guessWordProp = wrapper.instance().props.guessWord
+        // check the type
+        expect(guessWordProp).toBeInstanceOf(Function)
+    })
+})
